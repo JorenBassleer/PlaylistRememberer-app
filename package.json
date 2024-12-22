@@ -16,12 +16,13 @@
     "vue-router": "^4.1.6"
   },
   "devDependencies": {
-    "@rushstack/eslint-patch": "^1.2.0",
     "@vitejs/plugin-vue": "^4.0.0",
     "@vue/eslint-config-prettier": "^7.1.0",
     "@vue/test-utils": "^2.3.0",
     "autoprefixer": "^10.4.20",
     "eslint": "^8.34.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-import-resolver-alias": "^1.1.2",
     "eslint-plugin-vue": "^9.9.0",
     "jsdom": "^21.1.0",
     "postcss": "^8.4.49",

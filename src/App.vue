@@ -6,6 +6,7 @@ const store = useBaseStore();
 
 const testing = async () => {
   const resultOfTest = store.apiTest();
+  // eslint-disable-next-line no-console
   console.log('resultOftest', resultOfTest);
 };
 await testing();

@@ -28,7 +28,7 @@ const handleCallback = async () => {
   if (code && state) {
     try {
       await handleAuthCallback({ code, state });
-      // console
+      localStorage.setItem('oauthState', state);
       router.push('/dashboard');
     } catch (error) {
       console.error('Error during token exchange:', error);

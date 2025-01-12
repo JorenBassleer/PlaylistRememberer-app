@@ -1,6 +1,9 @@
+import { ref } from 'vue';
 import { defineStore } from 'pinia';
 
 const useBaseStore = defineStore('base', () => {
+  const isAuthenticated = ref(false);
+
   const getLoginUrl = async () => {
     const response = await fetch(`${import.meta.env.VITE_API_URL}/google`, {
       method: 'GET',
@@ -19,7 +22,26 @@ const useBaseStore = defineStore('base', () => {
     });
     return response.json();
   };
-  return { getLoginUrl, handleAuthCallback };
+
+  const checkAuth = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/google/validate`, {
+        method: 'GET',
+        credentials: 'include',
+      });
+      const data = await response.json();
+      isAuthenticated.value = data.authenticated;
+    } catch (error) {
+      isAuthenticated.value = false;
+    }
+  };
+
+  return {
+    getLoginUrl,
+    handleAuthCallback,
+    isAuthenticated,
+    checkAuth,
+  };
 });
 
 export default useBaseStore;

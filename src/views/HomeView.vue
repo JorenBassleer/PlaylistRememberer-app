@@ -35,7 +35,6 @@ const handleCallback = async () => {
     }
   }
 };
-
-// Call this function on the front-end's callback route
+// TODO only check this if certain params in URL
 handleCallback();
 </script>

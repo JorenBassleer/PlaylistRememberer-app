@@ -2,7 +2,10 @@ import { defineStore } from 'pinia';
 
 const useBaseStore = defineStore('base', () => {
   const getLoginUrl = async () => {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/google`);
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/google`, {
+      method: 'GET',
+      credentials: 'include',
+    });
 
     return response.json();
   };

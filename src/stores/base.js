@@ -5,6 +5,7 @@ import useFetch from '../composables/fetch';
 const useBaseStore = defineStore('base', () => {
   const { fetch } = useFetch();
 
+  const userPlaylists = ref([]);
   const isAuthenticated = ref(false);
 
   const getLoginUrl = async () => fetch('/google', {
@@ -29,7 +30,14 @@ const useBaseStore = defineStore('base', () => {
   };
 
   const getPlaylists = async () => {
-
+    try {
+      userPlaylists.value = await fetch('/playlist', {
+        method: 'GET',
+      });
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error(e.message);
+    }
   };
 
   return {
@@ -37,6 +45,8 @@ const useBaseStore = defineStore('base', () => {
     handleAuthCallback,
     isAuthenticated,
     checkAuth,
+    getPlaylists,
+    userPlaylists,
   };
 });
 

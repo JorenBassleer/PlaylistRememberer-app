@@ -1,38 +1,46 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
+import useFetch from '../composables/fetch';
 
 const useBaseStore = defineStore('base', () => {
+  const { fetch } = useFetch();
+
+  const userPlaylists = ref([]);
   const isAuthenticated = ref(false);
 
-  const getLoginUrl = async () => {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/google`, {
+  const getLoginUrl = async () =>
+    fetch('/google', {
       method: 'GET',
-      credentials: 'include',
     });
 
-    return response.json();
-  };
-
-  const handleAuthCallback = async (payload) => {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/google/oauth2callback`, {
+  const handleAuthCallback = async (payload) =>
+    fetch('/google/oauth2callback', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...payload }),
-      credentials: 'include',
     });
-    return response.json();
-  };
 
   const checkAuth = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/google/validate`, {
+      const response = await fetch('/google/validate', {
         method: 'GET',
-        credentials: 'include',
       });
-      const data = await response.json();
-      isAuthenticated.value = data.authenticated;
+      isAuthenticated.value = response.authenticated;
     } catch (error) {
       isAuthenticated.value = false;
+    }
+  };
+
+  const getPlaylists = async () => {
+    try {
+      const response = await fetch('/playlist', {
+        method: 'GET',
+      });
+      // TODO: use the pagination accessible in response.pageInfo & such
+      userPlaylists.value = response.items;
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error(e.message);
     }
   };
 
@@ -41,6 +49,8 @@ const useBaseStore = defineStore('base', () => {
     handleAuthCallback,
     isAuthenticated,
     checkAuth,
+    getPlaylists,
+    userPlaylists,
   };
 });
 

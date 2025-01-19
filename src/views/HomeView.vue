@@ -1,12 +1,12 @@
 <template>
   <div class="flex justify-center items-center h-screen">
-      <div
-        class="border bg-white rounded p-4 text-center text-gray-600 font-semibold cursor-pointer"
-        @click="onLogin"
-      >
-        Login
-      </div>
+    <div
+      class="border bg-white rounded p-4 text-center text-gray-600 font-semibold cursor-pointer"
+      @click="onLogin"
+    >
+      Login
     </div>
+  </div>
 </template>
 <script setup>
 import { useRouter } from 'vue-router';

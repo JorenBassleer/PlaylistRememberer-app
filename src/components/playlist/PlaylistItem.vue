@@ -3,7 +3,7 @@
     <img
       :src="playlist.snippet.tumbnails.medium.url"
       :alt="playlist.snippet.title"
-    >
+    />
   </article>
 </template>
 <script setup>

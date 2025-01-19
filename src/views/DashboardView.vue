@@ -8,9 +8,7 @@
         :playlist="playlist"
       />
     </template>
-    <div v-else>
-      No playlists found from the user
-    </div>
+    <div v-else>No playlists found from the user</div>
   </section>
 </template>
 <script setup>

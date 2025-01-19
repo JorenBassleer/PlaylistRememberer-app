@@ -33,9 +33,11 @@ const useBaseStore = defineStore('base', () => {
 
   const getPlaylists = async () => {
     try {
-      userPlaylists.value = await fetch('/playlist', {
+      const response = await fetch('/playlist', {
         method: 'GET',
       });
+      // TODO: use the pagination accessible in response.pageInfo & such
+      userPlaylists.value = response.items;
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error(e.message);

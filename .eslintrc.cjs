@@ -3,11 +3,12 @@ module.exports = {
   extends: [
     'plugin:vue/vue3-recommended',
     'eslint:recommended',
-    'airbnb',
+    'airbnb-base',
   ],
   parserOptions: {
     ecmaVersion: 'latest',
   },
+  ignorePatterns: ['*.config.js'],
   rules: {
     'max-len': 'off',
     'no-underscore-dangle': 'off',

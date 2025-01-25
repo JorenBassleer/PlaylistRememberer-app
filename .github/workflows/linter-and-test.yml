@@ -6,6 +6,9 @@ on:
       - opened
       - edited
       - ready_for_review
+  push:
+    branches:
+      main
 jobs:
   Linter-And-Test:
     runs-on: ubuntu-latest

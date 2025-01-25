@@ -31,6 +31,7 @@ const handleCallback = async () => {
       localStorage.setItem('oauthState', state);
       router.push('/dashboard');
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Error during token exchange:', error);
     }
   }

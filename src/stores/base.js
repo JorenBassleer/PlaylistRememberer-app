@@ -8,17 +8,15 @@ const useBaseStore = defineStore('base', () => {
   const userPlaylists = ref([]);
   const isAuthenticated = ref(false);
 
-  const getLoginUrl = async () =>
-    fetch('/google', {
-      method: 'GET',
-    });
+  const getLoginUrl = async () => fetch('/google', {
+    method: 'GET',
+  });
 
-  const handleAuthCallback = async (payload) =>
-    fetch('/google/oauth2callback', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...payload }),
-    });
+  const handleAuthCallback = async (payload) => fetch('/google/oauth2callback', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ...payload }),
+  });
 
   const checkAuth = async () => {
     try {

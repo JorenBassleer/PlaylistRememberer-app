@@ -1,5 +1,5 @@
 name: Linter and test
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+
 on:
   pull_request:
     branches:
@@ -8,6 +8,7 @@ jobs:
   Explore-GitHub-:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
       - run: npm ci
       - run: npm run lint
       - run: npm run test:unit

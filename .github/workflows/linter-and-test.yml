@@ -2,8 +2,10 @@ name: Linter and test
 
 on:
   pull_request:
-    branches:
-      - 'main'
+    types:
+      - opened
+      - edited
+      - ready_for_review
 jobs:
   Linter-And-Test:
     runs-on: ubuntu-latest

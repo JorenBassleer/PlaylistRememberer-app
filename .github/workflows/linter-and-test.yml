@@ -6,9 +6,8 @@ on:
       - opened
       - edited
       - ready_for_review
-  push:
-    branches:
-      main
+      - reopened
+      - synchronize
 jobs:
   Linter-And-Test:
     runs-on: ubuntu-latest

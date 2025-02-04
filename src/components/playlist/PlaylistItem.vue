@@ -1,5 +1,5 @@
 <template>
-  <article class="flex flex-col md:flex-row item-start md:items-center border p-2 rounded gap-4">
+  <article class="flex flex-col item-start border p-2 rounded gap-4 relative">
     <img
       :src="playlist.snippet.thumbnails.medium.url"
       :alt="playlist.snippet.title"
@@ -12,6 +12,7 @@
         {{ new Date(playlist.snippet.publishedAt).toLocaleDateString() }}
       </div>
     </div>
+    <span class="absolute py-2 px-3 rounded-full top-0 right-0 bg-white text-gray-600">{{ playlist.contentDetails.itemCount }}</span>
   </article>
 </template>
 <script setup>

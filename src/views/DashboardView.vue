@@ -7,16 +7,27 @@
     >
       isLoading...
     </div>
-    <div
-      v-else-if="userPlaylists?.length"
-      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 md gap-4"
-    >
-      <PlaylistItem
-        v-for="playlist in userPlaylists"
-        :key="playlist.id"
-        :playlist="playlist"
-      />
-    </div>
+    <template v-else-if="userPlaylists?.length">
+      Already saved playlists
+      <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mb-4 gap-4">
+        <PlaylistItem
+          v-for="playlist in userPlaylists.filter((entry) => selectedPlaylists.includes(entry.id))"
+          :key="playlist.id"
+          :playlist="playlist"
+          class="bg-white"
+          @click="onSelectPlaylist(playlist.id)"
+        />
+      </section>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <PlaylistItem
+          v-for="playlist in userPlaylists.filter((entry) => !selectedPlaylists.includes(entry.id))"
+          :key="playlist.id"
+          :playlist="playlist"
+          class="cursor-pointer hover:border-2"
+          @click="onSelectPlaylist(playlist.id)"
+        />
+      </div>
+    </template>
     <div v-else>
       No playlists found from the user
     </div>
@@ -32,6 +43,13 @@ const store = useBaseStore();
 const { userPlaylists } = storeToRefs(store);
 
 const isLoading = ref(false);
+const selectedPlaylists = ref([]);
+
+// Have option to select all
+const onSelectPlaylist = (playlistId) => {
+  selectedPlaylists.value.push(playlistId);
+  // Do call to backend
+};
 
 onMounted(async () => {
   isLoading.value = true;

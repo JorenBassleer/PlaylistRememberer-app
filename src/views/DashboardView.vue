@@ -7,26 +7,46 @@
     >
       isLoading...
     </div>
-    <template v-else-if="userPlaylists?.length">
+    <template v-else-if="allUserPlaylists.unsaved.length || allUserPlaylists.saved.length">
       Already saved playlists
-      <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mb-4 gap-4">
+      <button
+        v-show="selectedPlaylists.length"
+        class="bg-white text-gray-600 px-4 py-2 rounded cursor-pointer "
+        @click="onSavePlaylists"
+      >
+        Save selected
+      </button>
+      <section
+        v-if="allUserPlaylists.saved.length"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mb-4 gap-4"
+      >
         <PlaylistItem
-          v-for="playlist in userPlaylists.filter((entry) => selectedPlaylists.includes(entry.id))"
+          v-for="playlist in allUserPlaylists.saved"
           :key="playlist.id"
           :playlist="playlist"
-          class="bg-white"
-          @click="onSelectPlaylist(playlist.id)"
+          class="bg-green-500 text-white cursor-pointer"
         />
       </section>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <PlaylistItem
-          v-for="playlist in userPlaylists.filter((entry) => !selectedPlaylists.includes(entry.id))"
-          :key="playlist.id"
-          :playlist="playlist"
-          class="cursor-pointer hover:border-2"
-          @click="onSelectPlaylist(playlist.id)"
-        />
-      </div>
+      <template v-if="allUserPlaylists.unsaved.length">
+        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mb-4 gap-4">
+          <PlaylistItem
+            v-for="playlist in allUserPlaylists.unsaved.filter((entry) => selectedPlaylists.includes(entry.id))"
+            :key="playlist.id"
+            :playlist="playlist"
+            class="bg-white"
+            @click="onDeselectPlaylist(playlist.id)"
+          />
+        </section>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <PlaylistItem
+            v-for="playlist in allUserPlaylists.unsaved.filter((entry) => !selectedPlaylists.includes(entry.id))"
+            :key="playlist.id"
+            :playlist="playlist"
+            class="cursor-pointer hover:border-2"
+            @click="onSelectPlaylist(playlist.id)"
+          />
+        </div>
+      </template>
     </template>
     <div v-else>
       No playlists found from the user
@@ -40,7 +60,7 @@ import useBaseStore from '@/stores/base';
 import PlaylistItem from '../components/playlist/PlaylistItem.vue';
 
 const store = useBaseStore();
-const { userPlaylists } = storeToRefs(store);
+const { allUserPlaylists } = storeToRefs(store);
 
 const isLoading = ref(false);
 const selectedPlaylists = ref([]);
@@ -48,12 +68,25 @@ const selectedPlaylists = ref([]);
 // Have option to select all
 const onSelectPlaylist = (playlistId) => {
   selectedPlaylists.value.push(playlistId);
-  // Do call to backend
+};
+
+const onDeselectPlaylist = (playlistId) => {
+  const toDeleteIndex = selectedPlaylists.value.findIndex((entry) => entry.id === playlistId);
+  selectedPlaylists.value.splice(toDeleteIndex, 1);
+};
+
+const onSavePlaylists = async () => {
+  await store.savePlaylists(selectedPlaylists.value);
 };
 
 onMounted(async () => {
   isLoading.value = true;
-  await store.getPlaylists();
+
+  await Promise.all([
+    store.getPlaylists(),
+    store.getSavedPlaylists(),
+  ]);
+
   isLoading.value = false;
 });
 </script>

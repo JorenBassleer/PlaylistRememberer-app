@@ -1,6 +1,7 @@
 <template>
   <article class="flex flex-col item-start border p-2 rounded gap-4 relative">
     <img
+      v-if="playlist.snippet.thumbnails"
       :src="playlist.snippet.thumbnails.medium.url"
       :alt="playlist.snippet.title"
     >

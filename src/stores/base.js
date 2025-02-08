@@ -1,4 +1,4 @@
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
 import useFetch from '../composables/fetch';
 
@@ -6,7 +6,14 @@ const useBaseStore = defineStore('base', () => {
   const { fetch } = useFetch();
 
   const userPlaylists = ref([]);
+  const savedPlaylists = ref([]);
   const isAuthenticated = ref(false);
+
+  const allUserPlaylists = computed(() => userPlaylists.value.reduce((acc, userPlaylist) => {
+    const isSaved = savedPlaylists.value.some((savedPlaylist) => savedPlaylist.id === userPlaylist.id);
+    acc[isSaved ? 'saved' : 'unsaved'].push(userPlaylist);
+    return acc;
+  }, { saved: [], unsaved: [] }));
 
   const getLoginUrl = async () => fetch('/google', {
     method: 'GET',
@@ -42,13 +49,41 @@ const useBaseStore = defineStore('base', () => {
     }
   };
 
+  const savePlaylists = async (playlists) => {
+    try {
+      const response = await fetch('/playlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(playlists),
+      });
+      // eslint-disable-next-line no-console
+      console.log('response', response);
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error(e.message);
+    }
+  };
+
+  const getSavedPlaylists = async () => {
+    try {
+      savedPlaylists.value = await fetch('/playlist/saved', {
+        method: 'GET',
+      });
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error(e.message);
+    }
+  };
+
   return {
     getLoginUrl,
     handleAuthCallback,
-    isAuthenticated,
     checkAuth,
     getPlaylists,
-    userPlaylists,
+    savePlaylists,
+    getSavedPlaylists,
+    isAuthenticated,
+    allUserPlaylists,
   };
 });
 

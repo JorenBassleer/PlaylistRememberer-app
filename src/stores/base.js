@@ -10,8 +10,8 @@ const useBaseStore = defineStore('base', () => {
   const isAuthenticated = ref(false);
 
   const allUserPlaylists = computed(() => userPlaylists.value.reduce((acc, userPlaylist) => {
-    const isSaved = savedPlaylists.value.some((savedPlaylist) => savedPlaylist.id === userPlaylist.id);
-    acc[isSaved ? 'saved' : 'unsaved'].push(userPlaylist);
+    const isSaved = savedPlaylists.value.find((savedPlaylist) => savedPlaylist.youtubeId === userPlaylist.id);
+    acc[isSaved ? 'saved' : 'unsaved'].push(isSaved ? { ...userPlaylist, ...isSaved } : userPlaylist);
     return acc;
   }, { saved: [], unsaved: [] }));
 
@@ -49,21 +49,6 @@ const useBaseStore = defineStore('base', () => {
     }
   };
 
-  const savePlaylists = async (playlists) => {
-    try {
-      const response = await fetch('/playlist', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(playlists),
-      });
-      // eslint-disable-next-line no-console
-      console.log('response', response);
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.error(e.message);
-    }
-  };
-
   const getSavedPlaylists = async () => {
     try {
       savedPlaylists.value = await fetch('/playlist/saved', {
@@ -75,6 +60,28 @@ const useBaseStore = defineStore('base', () => {
     }
   };
 
+  const savePlaylists = async (playlists) => {
+    try {
+      await fetch('/playlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(playlists),
+      });
+      await getSavedPlaylists();
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error(e.message);
+    }
+  };
+
+  const getPlaylistVideos = async (youtubeId) => {
+    try {
+      return fetch(`/playlist/videos/${youtubeId}`);
+    } catch (e) {
+      return e.message;
+    }
+  };
+
   return {
     getLoginUrl,
     handleAuthCallback,
@@ -82,6 +89,7 @@ const useBaseStore = defineStore('base', () => {
     getPlaylists,
     savePlaylists,
     getSavedPlaylists,
+    getPlaylistVideos,
     isAuthenticated,
     allUserPlaylists,
   };

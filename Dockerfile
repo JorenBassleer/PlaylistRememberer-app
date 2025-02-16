@@ -6,6 +6,7 @@ RUN npm ci
 RUN npm run build
 
 # serve step
-FROM nginx:alpine as server
-COPY --chown=node-builder /app/dist /user/share/nginx/html
+FROM nginx:alpine AS server
+WORKDIR /usr/share/nginx/html
+COPY --from=node-builder /app/dist .
 CMD ["nginx", "-g", "daemon off;"]

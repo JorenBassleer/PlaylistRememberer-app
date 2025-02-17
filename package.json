@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vue-tsc && vite build",
     "preview": "vite preview",
     "test:unit": "echo 'Skipping tests temporarily' && exit 0",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
@@ -28,7 +28,9 @@
     "postcss": "^8.4.49",
     "prettier": "^2.8.4",
     "tailwindcss": "^3.4.17",
+    "typescript": "^5.3.3",
     "vite": "^4.1.4",
-    "vitest": "^0.29.1"
+    "vitest": "^0.29.1",
+    "vue-tsc": "^2.2.2"
   }
 }

@@ -6,10 +6,6 @@ import router from './router';
 
 import './assets/main.css';
 
-const name: string = 'john';
-
-console.log(name);
-
 const app = createApp(App);
 
 app.use(createPinia());

@@ -9,11 +9,14 @@ const useBaseStore = defineStore('base', () => {
   const savedPlaylists = ref([]);
   const isAuthenticated = ref(false);
 
-  const allUserPlaylists = computed(() => userPlaylists.value.reduce((acc, userPlaylist) => {
-    const isSaved = savedPlaylists.value.find((savedPlaylist) => savedPlaylist.youtubeId === userPlaylist.id);
-    acc[isSaved ? 'saved' : 'unsaved'].push(isSaved ? { ...userPlaylist, ...isSaved } : userPlaylist);
-    return acc;
-  }, { saved: [], unsaved: [] }));
+  const allUserPlaylists = computed(() => userPlaylists.value.reduce(
+    (acc, userPlaylist) => {
+      const isSaved = savedPlaylists.value.find((savedPlaylist) => savedPlaylist.youtubeId === userPlaylist.id);
+      acc[isSaved ? 'saved' : 'unsaved'].push(isSaved ? { ...userPlaylist, ...isSaved } : userPlaylist);
+      return acc;
+    },
+    { saved: [], unsaved: [] },
+  ));
 
   const getLoginUrl = async () => fetch('/google', {
     method: 'GET',

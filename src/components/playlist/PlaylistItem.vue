@@ -1,12 +1,12 @@
 <template>
-  <article class="flex flex-col item-start border p-2 rounded gap-4 relative">
+  <article class="item-start relative flex flex-col gap-4 rounded border p-2">
     <img
       v-if="playlist.snippet.thumbnails"
       :src="playlist.snippet.thumbnails.medium.url"
       :alt="playlist.snippet.title"
     >
     <div>
-      <h2 class="text-lg md:text-3xl font-semibold">
+      <h2 class="text-lg font-semibold md:text-3xl">
         {{ playlist.snippet.title }}
       </h2>
       <div>
@@ -14,12 +14,10 @@
       </div>
     </div>
     <span
-      class="absolute py-2 px-3 rounded-full top-0 right-0  text-gray-600 font-semibold"
-      :class="{'bg-white' : !withVideos}"
+      class="absolute right-0 top-0 rounded-full px-3 py-2 font-semibold text-gray-600"
+      :class="{ 'bg-white': !withVideos }"
     >
-      <template v-if="withVideos">
-        ✅
-      </template>
+      <template v-if="withVideos"> ✅ </template>
       <template v-else>
         {{ playlist.contentDetails.itemCount }}
       </template>
@@ -35,9 +33,9 @@
         <article
           v-for="video in videos"
           :key="video.id"
-          class="flex justify-between items-center"
+          class="flex items-center justify-between"
         >
-          <div> {{ video.snippet.title }}</div>
+          <div>{{ video.snippet.title }}</div>
           <div>{{ video.snippet.videoOwnerChannelTitle }}</div>
         </article>
       </div>

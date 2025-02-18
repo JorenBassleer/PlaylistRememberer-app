@@ -2,21 +2,21 @@
   <section>
     <div
       v-if="isLoading"
-      class="flex items-center justify-center min-h-screen"
+      class="flex min-h-screen items-center justify-center"
     >
       isLoading...
     </div>
     <template v-else-if="allUserPlaylists.unsaved.length || allUserPlaylists.saved.length">
       <button
         v-show="selectedPlaylists.length"
-        class="bg-white text-gray-600 px-4 py-2 rounded cursor-pointer "
+        class="cursor-pointer rounded bg-white px-4 py-2 text-gray-600"
         @click="onSavePlaylists"
       >
         Save selected
       </button>
       <section
         v-if="allUserPlaylists.saved.length"
-        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mb-4 gap-4"
+        class="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4"
       >
         <PlaylistItem
           v-for="playlist in allUserPlaylists.saved"
@@ -27,16 +27,16 @@
         />
       </section>
       <template v-if="allUserPlaylists.unsaved.length">
-        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mb-4 gap-4">
+        <section class="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
           <PlaylistItem
             v-for="playlist in allUserPlaylists.unsaved.filter((entry) => selectedPlaylists.includes(entry.id))"
             :key="playlist.id"
             :playlist="playlist"
-            class="bg-white cursor-pointer text-gray-700"
+            class="cursor-pointer bg-white text-gray-700"
             @click="onDeselectPlaylist(playlist.id)"
           />
         </section>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
           <PlaylistItem
             v-for="playlist in allUserPlaylists.unsaved.filter((entry) => !selectedPlaylists.includes(entry.id))"
             :key="playlist.id"
@@ -83,10 +83,7 @@ const onSavePlaylists = async () => {
 onMounted(async () => {
   isLoading.value = true;
 
-  await Promise.all([
-    store.getPlaylists(),
-    store.getSavedPlaylists(),
-  ]);
+  await Promise.all([store.getPlaylists(), store.getSavedPlaylists()]);
 
   isLoading.value = false;
 });

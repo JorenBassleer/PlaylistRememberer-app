@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
-import useFetch from '../composables/fetch';
+import useFetch from '@/composables/fetch';
 
 const useBaseStore = defineStore('base', () => {
   const { fetch } = useFetch();

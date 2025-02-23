@@ -1,5 +1,6 @@
 import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
+import type { Video } from '@/types/video';
 import useFetch from '@/composables/fetch';
 
 const useBaseStore = defineStore('base', () => {
@@ -77,11 +78,16 @@ const useBaseStore = defineStore('base', () => {
     }
   };
 
-  const getPlaylistVideos = async (youtubeId) => {
+  const getPlaylistVideos = async (youtubeId: string): Promise<Video[]> => {
     try {
-      return fetch(`/playlist/videos/${youtubeId}`);
+      const response = await fetch(`/playlist/videos/${youtubeId}`);
+      if (!response.ok) throw new Error(response.status);
+      const returnValue: Video[] = await response.json();
+      return returnValue;
     } catch (e) {
-      return e.message;
+      const tmp: Video[] = [];
+      return tmp;
+      // return e.message;
     }
   };
 

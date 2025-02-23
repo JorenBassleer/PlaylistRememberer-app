@@ -42,24 +42,24 @@
     </section>
   </article>
 </template>
-<script setup>
+<script setup lang="ts">
 import { onMounted, shallowRef } from 'vue';
+import type { Playlist } from '@/types/playlist';
 import useBaseStore from '@/stores/base';
+import type { Video } from '@/types/video';
 
-const props = defineProps({
-  playlist: {
-    type: Object,
-    required: true,
-  },
-  withVideos: {
-    type: Boolean,
-    default: false,
-  },
+type Props = {
+  playlist: Playlist,
+  withVideos: boolean,
+};
+
+const props = withDefaults(defineProps<Props>(), {
+  withVideos: false,
 });
 
 const store = useBaseStore();
 
-const videos = shallowRef([]);
+const videos = shallowRef<Video[]>([]);
 const showVideos = shallowRef(false);
 
 onMounted(async () => {

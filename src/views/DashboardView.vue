@@ -52,7 +52,7 @@
     </div>
   </section>
 </template>
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import useBaseStore from '@/stores/base';
@@ -60,6 +60,7 @@ import PlaylistItem from '../components/playlist/PlaylistItem.vue';
 
 const store = useBaseStore();
 const { allUserPlaylists } = storeToRefs(store);
+
 // eslint-disable-next-line no-console
 console.log('store', store.allUserPlaylists);
 const isLoading = ref(false);

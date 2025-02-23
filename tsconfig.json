@@ -8,6 +8,7 @@
     "module": "ES2020",
     "paths": {
       "@*": ["./src*"]
-    }
-  }
+    },
+    "strict": true
+  },
 }

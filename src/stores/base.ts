@@ -1,19 +1,22 @@
 import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
+import type { Playlist, SavedPlaylist, CombinedPlaylist } from '@/types/playlist';
 import type { Video } from '@/types/video';
 import useFetch from '@/composables/fetch';
 
 const useBaseStore = defineStore('base', () => {
   const { fetch } = useFetch();
 
-  const userPlaylists = ref([]);
-  const savedPlaylists = ref([]);
+  const userPlaylists = ref<Playlist[]>([]);
+  const savedPlaylists = ref<SavedPlaylist[]>([]);
   const isAuthenticated = ref(false);
 
-  const allUserPlaylists = computed(() => userPlaylists.value.reduce(
+  const allUserPlaylists = computed(() => userPlaylists.value.reduce<{ saved: CombinedPlaylist[], unsaved: Playlist[] }>(
     (acc, userPlaylist) => {
       const isSaved = savedPlaylists.value.find((savedPlaylist) => savedPlaylist.youtubeId === userPlaylist.id);
-      acc[isSaved ? 'saved' : 'unsaved'].push(isSaved ? { ...userPlaylist, ...isSaved } : userPlaylist);
+      if (isSaved) {
+        acc.saved.push({ ...userPlaylist, ...isSaved });
+      } else acc.unsaved.push(userPlaylist);
       return acc;
     },
     { saved: [], unsaved: [] },
@@ -23,7 +26,7 @@ const useBaseStore = defineStore('base', () => {
     method: 'GET',
   });
 
-  const handleAuthCallback = async (payload) => fetch('/google/oauth2callback', {
+  const handleAuthCallback = async (payload: { code: string, state: string }) => fetch('/google/oauth2callback', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ ...payload }),
@@ -49,7 +52,7 @@ const useBaseStore = defineStore('base', () => {
       userPlaylists.value = response.items;
     } catch (e) {
       // eslint-disable-next-line no-console
-      console.error(e.message);
+      console.error(e instanceof Error ? e.message : e);
     }
   };
 
@@ -60,11 +63,11 @@ const useBaseStore = defineStore('base', () => {
       });
     } catch (e) {
       // eslint-disable-next-line no-console
-      console.error(e.message);
+      console.error(e instanceof Error ? e.message : e);
     }
   };
 
-  const savePlaylists = async (playlists) => {
+  const savePlaylists = async (playlists: string[]) => {
     try {
       await fetch('/playlist', {
         method: 'POST',
@@ -74,7 +77,7 @@ const useBaseStore = defineStore('base', () => {
       await getSavedPlaylists();
     } catch (e) {
       // eslint-disable-next-line no-console
-      console.error(e.message);
+      console.error(e instanceof Error ? e.message : e);
     }
   };
 

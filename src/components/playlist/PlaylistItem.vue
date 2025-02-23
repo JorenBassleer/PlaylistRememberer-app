@@ -44,13 +44,14 @@
 </template>
 <script setup lang="ts">
 import { onMounted, shallowRef } from 'vue';
-import type { Playlist } from '@/types/playlist';
+import type { Playlist, CombinedPlaylist } from '@/types/playlist';
 import useBaseStore from '@/stores/base';
 import type { Video } from '@/types/video';
 
+// Handle it differently than combined
 type Props = {
-  playlist: Playlist,
-  withVideos: boolean,
+  playlist: Playlist | CombinedPlaylist
+  withVideos: boolean
 };
 
 const props = withDefaults(defineProps<Props>(), {
@@ -63,6 +64,6 @@ const videos = shallowRef<Video[]>([]);
 const showVideos = shallowRef(false);
 
 onMounted(async () => {
-  if (props.withVideos) videos.value = await store.getPlaylistVideos(props.playlist.youtubeId);
+  if (props.withVideos && instanceof props.playlist ) videos.value = await store.getPlaylistVideos(props.playlist.youtubeId);
 });
 </script>

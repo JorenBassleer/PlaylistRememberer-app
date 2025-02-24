@@ -1,25 +1,32 @@
 import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
-import useFetch from '../composables/fetch';
+import type { Playlist, SavedPlaylist, CombinedPlaylist } from '@/types/playlist';
+import type { Video } from '@/types/video';
+import useFetch from '@/composables/fetch';
 
 const useBaseStore = defineStore('base', () => {
   const { fetch } = useFetch();
 
-  const userPlaylists = ref([]);
-  const savedPlaylists = ref([]);
+  const userPlaylists = ref<Playlist[]>([]);
+  const savedPlaylists = ref<SavedPlaylist[]>([]);
   const isAuthenticated = ref(false);
 
-  const allUserPlaylists = computed(() => userPlaylists.value.reduce((acc, userPlaylist) => {
-    const isSaved = savedPlaylists.value.find((savedPlaylist) => savedPlaylist.youtubeId === userPlaylist.id);
-    acc[isSaved ? 'saved' : 'unsaved'].push(isSaved ? { ...userPlaylist, ...isSaved } : userPlaylist);
-    return acc;
-  }, { saved: [], unsaved: [] }));
+  const allUserPlaylists = computed(() => userPlaylists.value.reduce<{ saved: CombinedPlaylist[], unsaved: Playlist[] }>(
+    (acc, userPlaylist) => {
+      const isSaved = savedPlaylists.value.find((savedPlaylist) => savedPlaylist.youtubeId === userPlaylist.id);
+      if (isSaved) {
+        acc.saved.push({ ...userPlaylist, ...isSaved });
+      } else acc.unsaved.push(userPlaylist);
+      return acc;
+    },
+    { saved: [], unsaved: [] },
+  ));
 
   const getLoginUrl = async () => fetch('/google', {
     method: 'GET',
   });
 
-  const handleAuthCallback = async (payload) => fetch('/google/oauth2callback', {
+  const handleAuthCallback = async (payload: { code: string, state: string }) => fetch('/google/oauth2callback', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ ...payload }),
@@ -45,7 +52,7 @@ const useBaseStore = defineStore('base', () => {
       userPlaylists.value = response.items;
     } catch (e) {
       // eslint-disable-next-line no-console
-      console.error(e.message);
+      console.error(e instanceof Error ? e.message : e);
     }
   };
 
@@ -56,11 +63,11 @@ const useBaseStore = defineStore('base', () => {
       });
     } catch (e) {
       // eslint-disable-next-line no-console
-      console.error(e.message);
+      console.error(e instanceof Error ? e.message : e);
     }
   };
 
-  const savePlaylists = async (playlists) => {
+  const savePlaylists = async (playlists: string[]) => {
     try {
       await fetch('/playlist', {
         method: 'POST',
@@ -70,15 +77,20 @@ const useBaseStore = defineStore('base', () => {
       await getSavedPlaylists();
     } catch (e) {
       // eslint-disable-next-line no-console
-      console.error(e.message);
+      console.error(e instanceof Error ? e.message : e);
     }
   };
 
-  const getPlaylistVideos = async (youtubeId) => {
+  const getPlaylistVideos = async (youtubeId: string): Promise<Video[]> => {
     try {
-      return fetch(`/playlist/videos/${youtubeId}`);
+      const response = await fetch(`/playlist/videos/${youtubeId}`);
+      if (!response.ok) throw new Error(response.status);
+      const returnValue: Video[] = await response.json();
+      return returnValue;
     } catch (e) {
-      return e.message;
+      const tmp: Video[] = [];
+      return tmp;
+      // return e.message;
     }
   };
 

@@ -1,8 +1,8 @@
 <template>
   <header />
-  <RouterView class="m-2 lg:m-20 max-w-screen min-h-screen" />
+  <RouterView class="max-w-screen m-2 min-h-screen lg:m-20" />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { RouterView } from 'vue-router';
 </script>

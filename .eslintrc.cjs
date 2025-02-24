@@ -1,23 +1,27 @@
 module.exports = {
   root: true,
   extends: [
-    'plugin:vue/vue3-recommended',
     'eslint:recommended',
+    'plugin:vue/vue3-recommended',
+    'plugin:@typescript-eslint/recommended',
     'airbnb-base',
+    'airbnb-typescript/base',
   ],
+  parser: 'vue-eslint-parser',
   parserOptions: {
+    parser: '@typescript-eslint/parser',
+    extraFileExtensions: ['.vue'],
     ecmaVersion: 'latest',
+    project: './tsconfig.eslint.json',
   },
-  ignorePatterns: ['*.config.js'],
+  ignorePatterns: ['*.config.*'],
+  plugins: [
+    'vue',
+    '@typescript-eslint',
+  ],
   rules: {
     'max-len': 'off',
-    'no-underscore-dangle': 'off',
     'no-console': 'error',
-    'linebreak-style': 'off',
-    'quote-props': ['error', 'consistent-as-needed'],
-    'prefer-arrow-callback': ['error', { allowNamedFunctions: true }],
-    'func-style': ['error', 'expression', { allowArrowFunctions: true }],
-    'array-bracket-newline': ['error', { multiline: true }],
   },
   settings: {
     'import/resolver': {
@@ -26,7 +30,7 @@ module.exports = {
           ['@', './src'],
           ['@stores', './src/stores'],
         ],
-        extensions: ['.js', '.json', '.vue'],
+        extensions: ['.js', '.json', '.vue', '.ts'],
       },
     },
   },

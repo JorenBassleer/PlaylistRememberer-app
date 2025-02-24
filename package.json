@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vue-tsc && vite build",
     "preview": "vite preview",
     "test:unit": "echo 'Skipping tests temporarily' && exit 0",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
+    "lint": "eslint . --ext .vue,.ts,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
     "format": "prettier --write src/"
   },
   "dependencies": {
@@ -16,19 +16,27 @@
     "vue-router": "^4.1.6"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
     "@vitejs/plugin-vue": "^4.0.0",
     "@vue/eslint-config-prettier": "^7.1.0",
+    "@vue/eslint-config-typescript": "^13.0.0",
     "@vue/test-utils": "^2.3.0",
     "autoprefixer": "^10.4.20",
     "eslint": "^8.34.0",
     "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-typescript": "^18.0.0",
     "eslint-import-resolver-alias": "^1.1.2",
     "eslint-plugin-vue": "^9.9.0",
     "jsdom": "^21.1.0",
     "postcss": "^8.4.49",
-    "prettier": "^2.8.4",
+    "prettier": "^3.5.1",
+    "prettier-plugin-tailwindcss": "^0.6.11",
     "tailwindcss": "^3.4.17",
+    "typescript": "^5.3.3",
     "vite": "^4.1.4",
-    "vitest": "^0.29.1"
+    "vitest": "^0.29.1",
+    "vue-eslint-parser": "^9.4.3",
+    "vue-tsc": "^2.2.2"
   }
 }

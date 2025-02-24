@@ -1,14 +1,14 @@
 <template>
-  <div class="flex justify-center items-center h-screen">
+  <div class="flex h-screen items-center justify-center">
     <div
-      class="border bg-white rounded p-4 text-center text-gray-600 font-semibold cursor-pointer"
+      class="cursor-pointer rounded border bg-white p-4 text-center font-semibold text-gray-600"
       @click="onLogin"
     >
       Login
     </div>
   </div>
 </template>
-<script setup>
+<script setup lang="ts">
 import { useRouter } from 'vue-router';
 import useBaseStore from '@/stores/base';
 

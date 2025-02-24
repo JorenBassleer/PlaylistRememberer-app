@@ -61,17 +61,15 @@ import PlaylistItem from '../components/playlist/PlaylistItem.vue';
 const store = useBaseStore();
 const { allUserPlaylists } = storeToRefs(store);
 
-// eslint-disable-next-line no-console
-console.log('store', store.allUserPlaylists);
 const isLoading = ref(false);
-const selectedPlaylists = ref([]);
+const selectedPlaylists = ref<string[]>([]);
 
 // Have option to select all
-const onSelectPlaylist = (playlistId) => {
+const onSelectPlaylist = (playlistId: string) => {
   selectedPlaylists.value.push(playlistId);
 };
 
-const onDeselectPlaylist = (playlistId) => {
+const onDeselectPlaylist = (playlistId: string) => {
   const toDeleteIndex = selectedPlaylists.value.indexOf(playlistId);
   selectedPlaylists.value.splice(toDeleteIndex, 1);
 };

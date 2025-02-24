@@ -14,7 +14,7 @@ module.exports = {
     ecmaVersion: 'latest',
     project: './tsconfig.eslint.json',
   },
-  ignorePatterns: ['*.config.js'],
+  ignorePatterns: ['*.config.*'],
   plugins: [
     'vue',
     '@typescript-eslint',

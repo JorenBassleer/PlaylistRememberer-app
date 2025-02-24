@@ -43,7 +43,7 @@
   </article>
 </template>
 <script setup lang="ts">
-import { onMounted, shallowRef } from 'vue';
+import { onMounted, shallowRef, computed } from 'vue';
 import type { Playlist, CombinedPlaylist } from '@/types/playlist';
 import useBaseStore from '@/stores/base';
 import type { Video } from '@/types/video';
@@ -63,7 +63,9 @@ const store = useBaseStore();
 const videos = shallowRef<Video[]>([]);
 const showVideos = shallowRef(false);
 
+const combinedPlaylist = computed<CombinedPlaylist | null>(() => props.playlist as CombinedPlaylist);
+
 onMounted(async () => {
-  if (props.withVideos && instanceof props.playlist ) videos.value = await store.getPlaylistVideos(props.playlist.youtubeId);
+  if (props.withVideos && combinedPlaylist.value) videos.value = await store.getPlaylistVideos(combinedPlaylist.value.youtubeId);
 });
 </script>

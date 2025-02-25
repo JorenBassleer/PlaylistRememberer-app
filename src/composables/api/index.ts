@@ -1,5 +1,5 @@
 const useFetch = () => {
-  const fetchWrapper = async (path: string, options: RequestInit = {}) => {
+  const fetchWrapper = async <T>(path: string, options = {}): Promise<T> => {
     const response = await fetch(`${import.meta.env.VITE_API_URL}${path}`, {
       credentials: 'include',
       ...options,

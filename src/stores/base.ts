@@ -2,7 +2,7 @@ import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
 import type { Playlist, SavedPlaylist, CombinedPlaylist } from '@/types/playlist';
 import type { Video } from '@/types/video';
-import useFetch from '@/composables/fetch';
+import useFetch from '@/composables/api';
 
 const useBaseStore = defineStore('base', () => {
   const { fetch } = useFetch();

@@ -1,7 +1,7 @@
 <template>
   <section>
     <div
-      v-if="isLoading"
+      v-if="isLoadingPlaylists"
       class="flex min-h-screen items-center justify-center"
     >
       isLoading...
@@ -56,10 +56,14 @@
 import { onMounted, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import useBaseStore from '@/stores/base';
+import usePlaylists from '@/composables/playlists';
 import PlaylistItem from '../components/playlist/PlaylistItem.vue';
 
 const store = useBaseStore();
-const { allUserPlaylists } = storeToRefs(store);
+// const { allUserPlaylists } = storeToRefs(store);
+const { playlistsQuery, savedPlaylistQuery } = usePlaylists();
+
+const { data: playlists, isLoading: isLoadingPlaylists } = playlistsQuery;
 
 const isLoading = ref(false);
 const selectedPlaylists = ref<string[]>([]);

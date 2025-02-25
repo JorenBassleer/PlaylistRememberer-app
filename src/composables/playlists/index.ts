@@ -6,7 +6,7 @@ const { fetch } = useFetch();
 const usePlaylists = () => {
   const queryClient = useQueryClient();
 
-  const playlistQuery = useQuery({
+  const playlistsQuery = useQuery({
     queryKey: ['playlists'],
     queryFn: () => fetch('/playlist', {
       method: 'GET',
@@ -31,7 +31,7 @@ const usePlaylists = () => {
     },
   });
 
-  return { ...playlistQuery, savedPlaylists: savedPlaylistQuery, savePlaylist: addSavedPlaylistMutation };
+  return { playlistsQuery, savedPlaylistQuery, savePlaylists: addSavedPlaylistMutation };
 };
 
-export default usePlaylists();
+export default usePlaylists;

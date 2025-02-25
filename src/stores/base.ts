@@ -34,7 +34,7 @@ const useBaseStore = defineStore('base', () => {
 
   const checkAuth = async () => {
     try {
-      const response = await fetch('/google/validate', {
+      const response = await fetch<{ authenticated: boolean }>('/google/validate', {
         method: 'GET',
       });
       isAuthenticated.value = response.authenticated;
@@ -45,7 +45,7 @@ const useBaseStore = defineStore('base', () => {
 
   const getPlaylists = async () => {
     try {
-      const response = await fetch('/playlist', {
+      const response = await fetch<{ items: Playlist[] }>('/playlist', {
         method: 'GET',
       });
       // TODO: use the pagination accessible in response.pageInfo & such
@@ -84,8 +84,7 @@ const useBaseStore = defineStore('base', () => {
   const getPlaylistVideos = async (youtubeId: string): Promise<Video[]> => {
     try {
       const response = await fetch(`/playlist/videos/${youtubeId}`);
-      if (!response.ok) throw new Error(response.status);
-      const returnValue: Video[] = await response.json();
+      const returnValue: Video[] = response as Video[];
       return returnValue;
     } catch (e) {
       const tmp: Video[] = [];

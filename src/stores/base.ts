@@ -22,7 +22,7 @@ const useBaseStore = defineStore('base', () => {
     { saved: [], unsaved: [] },
   ));
 
-  const getLoginUrl = async () => fetch('/google', {
+  const getLoginUrl = async () => fetch<string>('/google', {
     method: 'GET',
   });
 

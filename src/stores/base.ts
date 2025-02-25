@@ -2,7 +2,7 @@ import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
 import type { Playlist, SavedPlaylist, CombinedPlaylist } from '@/types/playlist';
 import type { Video } from '@/types/video';
-import useFetch from '@/composables/fetch';
+import useFetch from '@/composables/api';
 
 const useBaseStore = defineStore('base', () => {
   const { fetch } = useFetch();
@@ -22,7 +22,7 @@ const useBaseStore = defineStore('base', () => {
     { saved: [], unsaved: [] },
   ));
 
-  const getLoginUrl = async () => fetch('/google', {
+  const getLoginUrl = async () => fetch<string>('/google', {
     method: 'GET',
   });
 
@@ -34,7 +34,7 @@ const useBaseStore = defineStore('base', () => {
 
   const checkAuth = async () => {
     try {
-      const response = await fetch('/google/validate', {
+      const response = await fetch<{ authenticated: boolean }>('/google/validate', {
         method: 'GET',
       });
       isAuthenticated.value = response.authenticated;
@@ -45,7 +45,7 @@ const useBaseStore = defineStore('base', () => {
 
   const getPlaylists = async () => {
     try {
-      const response = await fetch('/playlist', {
+      const response = await fetch<{ items: Playlist[] }>('/playlist', {
         method: 'GET',
       });
       // TODO: use the pagination accessible in response.pageInfo & such
@@ -84,8 +84,7 @@ const useBaseStore = defineStore('base', () => {
   const getPlaylistVideos = async (youtubeId: string): Promise<Video[]> => {
     try {
       const response = await fetch(`/playlist/videos/${youtubeId}`);
-      if (!response.ok) throw new Error(response.status);
-      const returnValue: Video[] = await response.json();
+      const returnValue: Video[] = response as Video[];
       return returnValue;
     } catch (e) {
       const tmp: Video[] = [];

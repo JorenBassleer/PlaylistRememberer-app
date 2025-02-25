@@ -51,7 +51,7 @@ import type { Video } from '@/types/video';
 // Handle it differently than combined
 type Props = {
   playlist: Playlist | CombinedPlaylist
-  withVideos: boolean
+  withVideos?: boolean
 };
 
 const props = withDefaults(defineProps<Props>(), {
